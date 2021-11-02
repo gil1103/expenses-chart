@@ -1,25 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+/* eslint-disable react/react-in-jsx-scope */
+import { Expenses } from './cmps/Expenses'
+import { NewExpense } from './cmps/NewExpense'
+import React, { useState } from 'react'
 
-function App() {
+const INITIAL_EXPENSES = [
+  {
+    id: 'e1',
+    title: 'Toilet Paper',
+    amount: 94.12,
+    date: new Date(2020, 7, 14)
+  },
+  {
+    id: 'e2',
+    title: 'New TV',
+    amount: 799.49,
+    date: new Date(2021, 2, 12)
+  },
+  {
+    id: 'e3',
+    title: 'Car Insurance',
+    amount: 294.67,
+    date: new Date(2021, 2, 28)
+  },
+  {
+    id: 'e4',
+    title: 'New Desk (Wooden)',
+    amount: 450,
+    date: new Date(2021, 5, 12)
+  }
+]
+
+function App () {
+  const [expenses, setExpenses] = useState(INITIAL_EXPENSES)
+
+  const addExpenseHandler = (newExpenses) => {
+    setExpenses(prevExpenses => {
+      // return [...prevExpenses].unshift(newExpenses)
+      return [newExpenses, ...prevExpenses]
+    })
+  }
+
+  const deleteExpenseHandler = (expenseId) => {
+    setExpenses(prevExpenses => {
+      const updatedExpenses = prevExpenses.filter(expense => expense.id !== expenseId)
+      return updatedExpenses
+    })
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <NewExpense onAddExpense={addExpenseHandler} />
+      <Expenses onDeleteExpense={deleteExpenseHandler} expenses={expenses} />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
